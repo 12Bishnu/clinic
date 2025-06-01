@@ -44,6 +44,18 @@ export interface Medicine {
   updated_at?: string;
 }
 
+export interface Prescription {
+  id: number;
+  patient_id: string;
+  patient_name: string;
+  patient_phone: string;
+  prescription_image: string;
+  status: 'pending' | 'verified' | 'rejected';
+  notes?: string;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface LaboratoryTest {
   id: number;
   test_name: string;
@@ -197,6 +209,25 @@ export const appointments = {
   },
   cancel: (id: number) => {
     return api.patch<Appointment>(`/appointments/${id}/`, { status: 'cancelled' });
+  },
+};
+
+export const prescriptions = {
+  getAll: () => {
+    return api.get<Prescription[]>('/prescriptions/');
+  },
+  upload: (formData: FormData) => {
+    return api.post<Prescription>('/prescriptions/', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+  },
+  getById: (id: number) => {
+    return api.get<Prescription>(`/prescriptions/${id}/`);
+  },
+  delete: (id: number) => {
+    return api.delete(`/prescriptions/${id}/`);
   },
 };
 
